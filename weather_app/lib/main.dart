@@ -54,6 +54,123 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.landscape){
+      return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: FutureBuilder(
+            future: weatherAPI.getweather(lat: 52.52, lon: 13.41),
+          
+               builder: (context, snapshot) 
+               {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return   CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return  Text('Error: ${snapshot.error}');
+          } 
+          
+          var data = snapshot.data;
+          
+          
+          return Row( 
+            mainAxisAlignment: MainAxisAlignment.center,
+          
+            children: [
+              Column(
+              
+                children: [
+                  Text(style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), " ${data!['name']}"),
+                  const SizedBox(height: 12),
+                  
+                  Text(style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold ,), " ${data['main']['temp']} °C"),
+                  const SizedBox(height: 12),
+                  
+                  Image.network(weatherAPI.getWeatherIcon(data['weather'][0]['icon'])),
+                  Text( style: TextStyle(fontSize: 20), "${data['weather'][0]['description']}"),
+                ],
+              ),
+
+
+              SizedBox(width: 100),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                    Text(style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), "Maximum"),  
+                    const SizedBox(height: 12),
+                  
+                    Text(style: TextStyle(fontSize: 18), "${data['main']['temp_max']} °C"),
+                        ],
+                      ),
+                      SizedBox(width: 40),
+                  
+                      Column(
+                        children: [
+                    Text(style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), "Minimum"),  
+                    const SizedBox(height: 12),
+                    Text(style: TextStyle(fontSize: 18), "${data['main']['temp_min']} °C"),
+                        ],
+                      ),
+                  
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                    Text(style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), "Sun rise"),  
+                    const SizedBox(height: 12),
+                  
+                    Icon(Icons.wb_sunny, color: Colors.orangeAccent,),
+                  
+                    const SizedBox(height: 12),
+                  
+                    Text(style: TextStyle(fontSize: 18), "${data['sys']['sunrise']}"),
+                        ],
+                      ),
+                      SizedBox(width: 40),
+                  
+                      Column(
+                        children: [
+                    Text(style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), "Sun set"),  
+                    const SizedBox(height: 12),
+                  
+                    Icon(Icons.nights_stay,  color: Colors.orangeAccent,),
+                    const SizedBox(height: 12),
+                    Text(style: TextStyle(fontSize: 18), "${data['sys']['sunset']}"),
+                        ],
+                      ),
+                  
+                    ],
+                  ),
+                ],
+              )
+
+
+            ],
+          
+          );
+          
+               }
+          
+          ),
+        ),
+      ),
+    );
+
+
+
+    }
+
     
     return Scaffold(
       body: SafeArea(

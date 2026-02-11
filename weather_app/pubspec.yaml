@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.6.0
   weather_icons: ^3.0.0
+  flutter_platform_widgets: ^10.0.1
 
 
 dev_dependencies:
