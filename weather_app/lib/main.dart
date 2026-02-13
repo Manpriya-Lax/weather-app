@@ -14,15 +14,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final weatherAPI =  WeatherAPI ("9f87037ccfc82dffc4548f6ad4328934");
+ // final weatherAPI =  WeatherAPI ("9f87037ccfc82dffc4548f6ad4328934");
   @override
  void initState() {
   super.initState();
 
-  final res = weatherAPI.getweather(lat: 35.6895, lon: 139.6917);
-  res.then((value) {
-    print("init $value");
-  });
+
+ 
+
+
+
+
+  // final res = weatherAPI.getweather(lat: 35.6895, lon: 139.6917);
+  // res.then((value) {
+  //   print("init $value");
+  // });
 }
 
 
@@ -34,6 +40,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
+
+      
     );
   }
 }
@@ -43,6 +52,8 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+  
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -51,18 +62,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final weatherAPI =  WeatherAPI ("9f87037ccfc82dffc4548f6ad4328934");
 
+String selectedCity = "Colombo";
+
+final Map<String, Map<String, double>> cities = {
+  "Berlin": {"lat": 52.52, "lon": 13.41},
+  "London": {"lat": 51.5074, "lon": -0.1278},
+  "Paris": {"lat": 48.8566, "lon": 2.3522},
+  "Tokyo": {"lat": 35.6762, "lon": 139.6503},
+  "Colombo": {"lat": 6.9271, "lon": 79.8612},
+};
+
 
   @override
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
+
+    
 
     if (orientation == Orientation.landscape){
       return Scaffold(
       body: SafeArea(
         child: Center(
           child: FutureBuilder(
-            future: weatherAPI.getweather(lat: 52.52, lon: 13.41),
-          
+
+              future: weatherAPI.getweather(
+  lat: cities[selectedCity]!['lat']!,
+  lon: cities[selectedCity]!['lon']!,
+              ),
                builder: (context, snapshot) 
                {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -81,6 +107,27 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(
               
                 children: [
+
+                   DropdownButton <String>(
+                value: selectedCity,
+                items: cities.keys.map((city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList()  
+              
+                , onChanged: (value) {
+                  setState(() {
+                    selectedCity = value!;
+                  });
+                },
+                ),
+
+                    const SizedBox(height: 20),
+
+
+
                   Text(style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), " ${data!['name']}"),
                   const SizedBox(height: 12),
                   
@@ -176,8 +223,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: Center(
           child: FutureBuilder(
-            future: weatherAPI.getweather(lat: 52.52, lon: 13.41),
-          
+
+
+
+ 
+future: weatherAPI.getweather(
+  lat: cities[selectedCity]!['lat']!,
+  lon: cities[selectedCity]!['lon']!,
+),
+
+
+
+
                builder: (context, snapshot) 
                {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -192,6 +249,27 @@ class _MyHomePageState extends State<MyHomePage> {
           return Column( 
           
             children: [
+
+              DropdownButton <String>(
+                value: selectedCity,
+                items: cities.keys.map((city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList()  
+              
+                , onChanged: (value) {
+                  setState(() {
+                    selectedCity = value!;
+                  });
+                },
+                ),
+
+                    const SizedBox(height: 20),
+
+
+
               const SizedBox(height: 20),
               Text(style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), " ${data!['name']}"),
               const SizedBox(height: 12),
